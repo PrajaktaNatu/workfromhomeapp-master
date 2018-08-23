@@ -5,6 +5,7 @@
         <div class="row">
           <div class="col-md-10"></div>
           <div class="col-md-2">
+            <button type="button" v-on:click="logout()">Logout</button>
             <router-link :to="{ name: 'CreateItem' }" class="btn btn-primary" :disabled="!quotaFull">Create WFH Request</router-link>
             <button v-on:click="calcReqs">Count requests in a month</button>
           </div>
@@ -28,7 +29,7 @@
                     <td>{{ item.example_date | formatDate }}</td>
                     <td>{{ item.reqStatus }}</td>
                     <td><router-link :to="{name: 'EditItem', params: { id: item._id }}" class="btn btn-primary" v-if="item.reqStatus === 'Pending'">Edit</router-link></td>
-                    <td><button class="btn btn-danger" v-on:click="deleteItem(item._id)" v-if="item.reqStatus === 'Pending'">Delete</button></td>
+                    <td><button class="btn btn-danger" v-on:click="deleteItem(item._id)" v-if="item.reqStatus === 'Pending'">Cancel</button></td>
                     <td><router-link :to="{name: 'ApproveReq', params: {id: item._id}}" class="btn btn-primary" v-if="item.reqStatus === 'Pending'">Approve</router-link></td>
                     <td><router-link :to="{name: 'RejectReq', params: {id: item._id}}" class="btn btn-primary" v-if="item.reqStatus === 'Pending'">Reject</router-link></td>
                 </tr>
@@ -77,7 +78,6 @@ import moment from 'moment'
                   dates.push(new Date(value.example_date));
                 });
                 dates.forEach(function(i){
-            //        console.log(i + " " + i.getMonth() + 1);
                     if((i.getMonth()) == moment().month()){
                         count ++;
                     }
@@ -91,11 +91,18 @@ import moment from 'moment'
 
             deleteItem(id)
             {
-              let uri = 'http://localhost:4000/items/delete/'+id;
-            //  this.items.splice(id, 1);
-              this.axios.get(uri);
-              this.fetchItems();
-            }
+                let uri = 'http://localhost:4000/items/cancel/' + id;
+                this.axios.post(uri, this.item).then((response) => {
+                this.fetchItems();
+              });
+            },
+            logout() {
+                let uri = 'http://localhost:4000/user/logout';
+//                console.log(this.user.email);
+                this.axios.get(uri, this.user).then((response) => {
+                this.$router.push({name: 'logout'})
+                })
+        }
         },
 
         filters : {
