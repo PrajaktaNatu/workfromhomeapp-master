@@ -136,12 +136,29 @@ itemRoutes.route('/').get(function (req, res) {
   });
 });
 
-// Defined delete | remove | destroy route
+/* don't want to hard delete, just status will be changed to cancelled
 itemRoutes.route('/delete/:id').get(function (req, res) {
   Item.findByIdAndRemove({_id: req.params.id}, function(err, item){
 		if(err) res.json(err);
 		else res.json('Successfully removed');
 	});
+});  */
+
+itemRoutes.route('/cancel/:id').post(function (req, res) {
+  Item.findById(req.params.id, function(err, item) {
+    if (!item)
+      return next(new Error('Could not load Document'));
+    else {
+      item.reqStatus = 'Cancelled';
+      item.save().then(item => {
+          res.json('request cancelled by user');
+          console.log('request cancelled by user');
+      })
+      .catch(err => {
+            res.status(400).send("unable to update the database");
+      });
+    }
+  });
 });
 
 module.exports = itemRoutes;
