@@ -56,7 +56,7 @@
             {
               let uri = 'http://localhost:4000/items/approve/' + this.$route.params.id;
                 this.axios.post(uri, this.item).then((response) => {
-                  this.$router.push({name: 'DisplayItem'});
+                  this.$router.push({name: 'Approve'});
                 });
             }
         }

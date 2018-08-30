@@ -1,12 +1,10 @@
 <template>
     <div>
-        <h1>Page displayed for other users</h1>
+        <h1>Page displayed for Admin</h1>
 
         <div class="row">
           <div class="col-md-10"></div>
           <div class="col-md-2">
-            <button type="button" v-on:click="logout()">Logout</button>
-            <router-link :to="{ name: 'CreateItem' }" class="btn btn-primary" :disabled="!quotaFull">Create WFH Request</router-link>
             <button v-on:click="calcReqs">Count requests in a month</button>
           </div>
         </div><br />
@@ -14,6 +12,7 @@
         <table class="table table-hover">
             <thead>
             <tr>
+                <td>Name</td>
                 <td>Reason</td>
                 <td>Applying for Date</td>
                 <td>Status</td>
@@ -23,11 +22,12 @@
 
             <tbody>
                 <tr v-for="item in items">
+                    <td>{{ item.name }}</td>
                     <td>{{ item.reason }}</td>
                     <td>{{ item.example_date | formatDate }}</td>
                     <td>{{ item.reqStatus }}</td>
-                    <td><router-link :to="{name: 'EditItem', params: { id: item._id }}" class="btn btn-primary" v-if="item.reqStatus === 'Pending'">Edit</router-link></td>
-                    <td><button class="btn btn-danger" v-on:click="deleteItem(item._id)" v-if="item.reqStatus === 'Pending'">Cancel</button></td>
+                    <td><router-link :to="{name: 'ApproveReq', params: {id: item._id}}" class="btn btn-primary" v-if="item.reqStatus === 'Pending'">Approve</router-link></td>
+                    <td><router-link :to="{name: 'RejectReq', params: {id: item._id}}" class="btn btn-primary" v-if="item.reqStatus === 'Pending'">Reject</router-link></td>
                 </tr>
             </tbody>
         </table>
