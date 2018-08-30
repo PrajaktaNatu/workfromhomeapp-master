@@ -5,6 +5,9 @@ import VueRouter from 'vue-router';
 //import store from './store'
 Vue.use(VueRouter);
 
+import VueSession from 'vue-session'
+Vue.use(VueSession)
+
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 Vue.use(VueAxios, axios);
@@ -15,14 +18,21 @@ import DisplayItem from './components/DisplayItem.vue';
 import EditItem from './components/EditItem.vue';
 import ApproveReq from './components/ApproveReq.vue'
 import RejectReq from './components/RejectReq.vue'
+import ApproveAdmin from './components/Approve.vue'
 
 import LoginComponent from "./components/login.vue"
+import LogoutComponent from "./components/logout.vue"
 
 const routes = [
   {
         name: 'CreateItem',
         path: '/create/item',
         component: CreateItem
+    },
+    {
+        name: 'Approve',
+        path: '/Approve',
+        component: ApproveAdmin
     },
     {
             name: 'EditItem',
@@ -56,6 +66,11 @@ const routes = [
           component: LoginComponent
       },
       {
+          path: "/logout",
+          name: "logout",
+          component: LogoutComponent
+      },
+      {
             name: 'ApproveReq',
             path: '/ApproveReq',
             component: ApproveReq
@@ -64,6 +79,10 @@ const routes = [
               name: 'RejectReq',
               path: '/RejectReq',
               component: RejectReq
+          },
+          {
+            name: 'signup',
+            path: '/signup'
           }
 
 ];
